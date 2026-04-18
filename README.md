@@ -24,3 +24,4 @@ This project introduces:
 - Bihar (high-depth analytics to avoid pan-India noise)
 
 ## 🖥️ Live Demo
+git push -u origin main
