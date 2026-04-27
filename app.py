@@ -12,7 +12,7 @@ st.set_page_config(
 )
 
 st.title("Aadhaar Accessibility & Inclusion Analytics")
-st.caption("Interactive, Privacy-aware, Geo-spatial Decision Support System")
+st.caption("Interactive, Privacy-aware Decision Support System")
 
 # -------------------------
 # LOAD DATA
@@ -23,7 +23,7 @@ def load_data():
     bio_files  = glob.glob("data/biometric/*.csv")
     enr_files  = glob.glob("data/enrolment/*.csv")
 
-    # 🔥 SAFE CHECK (IMPORTANT)
+    # 🔥 CLOUD SAFE FALLBACK
     if len(demo_files) == 0 or len(bio_files) == 0 or len(enr_files) == 0:
         st.warning("Using sample data (cloud demo mode)")
 
@@ -44,12 +44,16 @@ def load_data():
 
         return demo_df, bio_df, enr_df
 
-    # ✅ NORMAL CASE (local run)
+    # REAL DATA
     demo_df = pd.concat([pd.read_csv(f) for f in demo_files], ignore_index=True)
     bio_df  = pd.concat([pd.read_csv(f) for f in bio_files], ignore_index=True)
     enr_df  = pd.concat([pd.read_csv(f) for f in enr_files], ignore_index=True)
 
     return demo_df, bio_df, enr_df
+
+
+# 🔥 IMPORTANT CALL
+demo_df, bio_df, enr_df = load_data()
 
 # -------------------------
 # STATE SELECTION
@@ -63,14 +67,14 @@ selected_state = st.sidebar.selectbox(
 )
 
 # -------------------------
-# FILTER DATA BY STATE
+# FILTER DATA
 # -------------------------
 demo_state = demo_df[demo_df["state"] == selected_state].copy()
 bio_state  = bio_df[bio_df["state"] == selected_state].copy()
 enr_state  = enr_df[enr_df["state"] == selected_state].copy()
 
 # -------------------------
-# AGGREGATION (DISTRICT LEVEL)
+# AGGREGATION
 # -------------------------
 demo_dist = demo_state.groupby("district").size().reset_index(name="demo_updates")
 bio_dist  = bio_state.groupby("district").size().reset_index(name="bio_usage")
@@ -84,13 +88,8 @@ inclusion_df = (
 )
 
 # -------------------------
-# RISK ENGINE
+# ASI (STRESS INDEX)
 # -------------------------
-
-# -------------------------
-# AADHAAR SERVICE STRESS INDEX (ASI)
-# -------------------------
-
 inclusion_df["asi_score"] = (
     (inclusion_df["bio_usage"] / (inclusion_df["enrolments"] + 1)) +
     (inclusion_df["demo_updates"] / (inclusion_df["enrolments"] + 1))
@@ -108,6 +107,9 @@ def asi_level(score):
 
 inclusion_df["asi_level"] = inclusion_df["asi_score"].apply(asi_level)
 
+# -------------------------
+# RISK SCORE
+# -------------------------
 inclusion_df["risk_score"] = (
     (inclusion_df["bio_usage"] - inclusion_df["enrolments"]) /
     (inclusion_df["demo_updates"] + 1)
@@ -124,7 +126,7 @@ def risk_label(score):
 inclusion_df["risk_category"] = inclusion_df["risk_score"].apply(risk_label)
 
 # -------------------------
-# DISTRICT SELECTION
+# DISTRICT SELECT
 # -------------------------
 district = st.sidebar.selectbox(
     "Select District",
@@ -141,22 +143,17 @@ col1, col2, col3 = st.columns(3)
 col1.metric("Risk Category", row["risk_category"])
 col2.metric("Risk Score", round(row["risk_score"], 2))
 col3.metric("Enrolments", int(row["enrolments"]))
-col4 = st.columns(1)[0]
-col4.metric("ASI Level", row["asi_level"])
+
+st.metric("ASI Level", row["asi_level"])
 
 # -------------------------
-# TABLE VIEW
-# -------------------------
-
-# -------------------------
-# AADHAAR SERVICE EARLY WARNING PANEL
+# TABLE
 # -------------------------
 st.subheader("Aadhaar Service Early Warning System")
 
 st.dataframe(
-    inclusion_df[
-        ["district", "asi_level", "asi_score"]
-    ].sort_values("asi_score", ascending=False),
+    inclusion_df[["district", "asi_level", "asi_score"]]
+    .sort_values("asi_score", ascending=False),
     use_container_width=True
 )
 
@@ -167,57 +164,7 @@ if st.checkbox("Show Full Risk Table"):
     )
 
 # -------------------------
-# GEO MAP (FINAL STABLE DESIGN)
+# MAP (SAFE VERSION)
 # -------------------------
-if False:
-
-    # Load India district shapefile
-    # india_dist = gpd.read_file("shapefiles/gadm41_IND_2.shp")
-
-    # Filter selected state
-    state_map = india_dist[
-        india_dist["NAME_1"].str.lower() == selected_state.lower()
-    ].copy()
-
-    # Normalize district names
-    state_map["district"] = state_map["NAME_2"].str.lower().str.strip()
-    inclusion_df["district"] = inclusion_df["district"].str.lower().str.strip()
-
-    # Merge analytics with map
-    map_df = state_map.merge(
-        inclusion_df,
-        on="district",
-        how="left"
-    )
-
-    fig, ax = plt.subplots(1, 1, figsize=(8, 10))
-
-    # Base map: ASI choropleth plot
-    map_df.plot(
-        column="asi_level",
-        categorical=True,
-        legend=True,
-        cmap="RdYlGn_r",
-        edgecolor="black",
-        linewidth=0.6,
-        ax=ax,
-        aspect="auto"
-    )
-
-
-    # Selected district: filled + bold
-    selected_geo = map_df[map_df["district"] == district.lower()]
-
-    if not selected_geo.empty:
-        selected_geo.plot(
-            ax=ax,
-            color="orange",
-            edgecolor="black",
-            linewidth=2.5,
-            aspect="auto"
-        )
-
-    ax.set_title(f"{selected_state} – Selected District View")
-    ax.axis("off")
-
-    st.pyplot(fig)
+if st.checkbox("Show Map (Demo)"):
+    st.info("Geo-spatial map available in local version only.")
