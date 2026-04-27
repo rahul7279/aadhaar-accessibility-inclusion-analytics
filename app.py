@@ -23,13 +23,33 @@ def load_data():
     bio_files  = glob.glob("data/biometric/*.csv")
     enr_files  = glob.glob("data/enrolment/*.csv")
 
+    # 🔥 SAFE CHECK (IMPORTANT)
+    if len(demo_files) == 0 or len(bio_files) == 0 or len(enr_files) == 0:
+        st.warning("Using sample data (cloud demo mode)")
+
+        demo_df = pd.DataFrame({
+            "state": ["Bihar", "Bihar"],
+            "district": ["Patna", "Gaya"]
+        })
+
+        bio_df = pd.DataFrame({
+            "state": ["Bihar", "Bihar"],
+            "district": ["Patna", "Gaya"]
+        })
+
+        enr_df = pd.DataFrame({
+            "state": ["Bihar", "Bihar"],
+            "district": ["Patna", "Gaya"]
+        })
+
+        return demo_df, bio_df, enr_df
+
+    # ✅ NORMAL CASE (local run)
     demo_df = pd.concat([pd.read_csv(f) for f in demo_files], ignore_index=True)
     bio_df  = pd.concat([pd.read_csv(f) for f in bio_files], ignore_index=True)
     enr_df  = pd.concat([pd.read_csv(f) for f in enr_files], ignore_index=True)
 
     return demo_df, bio_df, enr_df
-
-demo_df, bio_df, enr_df = load_data()
 
 # -------------------------
 # STATE SELECTION
