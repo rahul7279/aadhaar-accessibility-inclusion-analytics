@@ -2,7 +2,3 @@ streamlit
 pandas
 numpy
 matplotlib
-geopandas
-shapely
-fiona
-pyogrio

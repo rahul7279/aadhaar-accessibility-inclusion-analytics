@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import glob
-import geopandas as gpd
 import matplotlib.pyplot as plt
 
 # -------------------------
@@ -150,10 +149,10 @@ if st.checkbox("Show Full Risk Table"):
 # -------------------------
 # GEO MAP (FINAL STABLE DESIGN)
 # -------------------------
-if st.checkbox("Show State Map with Selected District"):
+if False:
 
     # Load India district shapefile
-    india_dist = gpd.read_file("shapefiles/gadm41_IND_2.shp")
+    # india_dist = gpd.read_file("shapefiles/gadm41_IND_2.shp")
 
     # Filter selected state
     state_map = india_dist[
