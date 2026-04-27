@@ -13,7 +13,7 @@ This project introduces:
 - Geo-spatial district-level risk visualization
 - Interactive decision dashboard
 
-🔗 **[Live Demo: Play the Quiz Here](https://rahul7279-aadhaar-accessibility-inclusion-analytics-app-lxzvmf.streamlit.app/)**
+🔗 **[Live Demo: Test the app here](https://rahul7279-aadhaar-accessibility-inclusion-analytics-app-lxzvmf.streamlit.app/)**
 
 <img width="1912" height="921" alt="Screenshot 2026-04-27 160519" src="https://github.com/user-attachments/assets/87422e87-e8ab-4a66-98af-0c623f55d574" />
 <img width="1464" height="593" alt="Screenshot 2026-04-27 160534" src="https://github.com/user-attachments/assets/759b8284-3e92-43e1-99e9-794aa75b2cd8" />
