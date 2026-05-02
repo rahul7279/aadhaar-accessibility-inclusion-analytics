@@ -1,6 +1,16 @@
-# Aadhaar Accessibility & Inclusion Analytics
+<p align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=30,003366,00a8cc&height=220&section=header&text=AADHAAR%20ANALYTICS&fontSize=65&fontColor=ffffff&fontAlignY=35&animation=fadeIn" width="100%" alt="Aadhaar Analytics Banner" />
+</p>
 
-An industry-grade, privacy-aware decision support system built for UIDAI Hackathon.
+<p align="center">
+  <img src="https://img.shields.io/badge/Domain-Digital%20Identity-orange.svg" />
+  <img src="https://img.shields.io/badge/Focus-Inclusion%20&%20Accessibility-green" />
+  <img src="https://img.shields.io/badge/Data-Analytics-blue" />
+  <img src="https://img.shields.io/badge/Impact-Social%20Welfare-red" />
+</p>
+
+## 📊 Bridging the Digital Divide
+**Aadhaar Accessibility & Inclusion Analytics** is a data-centric initiative designed to analyze the reach and effectiveness of India's Aadhaar ecosystem. This project focuses on identifying gaps in accessibility and ensuring that the digital identity framework is inclusive for all demographics, including rural and marginalized populations.
 
 ## 🔍 Problem
 Identifying under-served populations and stress zones in Aadhaar enrolment,
